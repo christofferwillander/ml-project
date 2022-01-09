@@ -1,32 +1,42 @@
+import math
+from datetime import date
+from urllib.parse import urlparse
 import numpy as np
 import pandas as pd
-from pandas.core.frame import DataFrame
 import sklearn as sk
 import whois
-import math
-from urllib.parse import urlparse
+from pandas.core.frame import DataFrame
 from tld import get_tld
-from datetime import date
 
 
 def main():
     #Reading initial dataset into Pandas DataFrame
-    initialData = pd.read_csv("./data/dataset.csv", sep=",")
+    initialData = pd.read_csv("./data/dataset3.csv", sep=",")
     print(initialData)
-    newColumns = ["url", "length", "numDigits", "entropy", "isHTTP", "isHTTPS", "params", "anchors", "directories", "tld", "age", "class"]
+    newColumns = ["length", "numAlphas", "numDigits", "alphaDigitRatio", "entropy", "isHTTP", "isHTTPS", "params", "anchors", "directories", "tld", "age", "class"]
     dataRows = []
     for index, row in initialData.iterrows():
         curRow = []
-        curRow.append(row[0])
         curRow.append(getLength(row[0]))
-        curRow.append(digitCount(row[0]))
+
+        alphas = alphaCount(row[0])
+        digits = digitCount(row[0])
+        curRow.append(alphas)
+        curRow.append(digits)
+
+        if digits != 0:
+            curRow.append(alphas/digits)
+        else:
+            curRow.append(1)
         curRow.append(URLentropy(row[0]))
         curRow.append(isHTTP(row[0]))
         curRow.append(isHTTPS(row[0]))
         curRow.append(parameterCount(row[0]))
         curRow.append(anchorCount(row[0]))
         curRow.append(directoryCount(row[0]))
+
         tld = getTLD(row[0])
+
         if tld is not None:
             curRow.append(tld)
             age = getAge(row[0])
@@ -34,8 +44,9 @@ def main():
                 curRow.append(age)
                 curRow.append(row[1])
                 dataRows.append(curRow)
+
     newData = DataFrame(dataRows, columns=newColumns)
-    newData.to_csv("./data/newDataSet.csv", index=False, header=True)
+    newData.to_csv("./data/newDataSet3.csv", index=False, header=True)
 
 # Helper functions for extracting URL string features
 def getLength(row):
@@ -84,6 +95,20 @@ def anchorCount(row):
 def directoryCount(row):
     directoryCount = row.split('http')[-1].split('//')[-1].split('/')
     return len(directoryCount)-1
+
+def digitCount(row):
+    digits = 0
+    for character in row:
+        if character.isdigit():
+            digits = digits + 1
+    return digits
+
+def alphaCount(row):
+    alphas = 0
+    for character in row:
+        if character.isalpha():
+            alphas = alphas + 1
+    return alphas
 
 def getTLD(row):
     try:
