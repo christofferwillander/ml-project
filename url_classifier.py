@@ -1,21 +1,19 @@
 import math
 from time import time
-import numpy as np
-from numpy.lib.function_base import average
-import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from numpy.lib.function_base import average
 from sklearn import preprocessing, svm
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, f1_score
-from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.metrics import (ConfusionMatrixDisplay, accuracy_score,
+                             confusion_matrix, f1_score, precision_score,
+                             recall_score)
+from sklearn.model_selection import (RandomizedSearchCV, StratifiedKFold,
+                                     train_test_split)
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import KBinsDiscretizer
-from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import ConfusionMatrixDisplay
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
 
 
 def main():
