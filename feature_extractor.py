@@ -1,17 +1,15 @@
 import math
 from datetime import date
 from urllib.parse import urlparse
-import numpy as np
 import pandas as pd
-import sklearn as sk
 import whois
 from pandas.core.frame import DataFrame
 from tld import get_tld
 
 
 def main():
-    #Reading initial dataset into Pandas DataFrame
-    initialData = pd.read_csv("./data/dataset3.csv", sep=",")
+    # Reading initial dataset into Pandas DataFrame
+    initialData = pd.read_csv("./data/initialData.csv", sep=",")
     print(initialData)
     newColumns = ["length", "numAlphas", "numDigits", "alphaDigitRatio", "entropy", "isHTTP", "isHTTPS", "params", "anchors", "directories", "tld", "age", "class"]
     dataRows = []
@@ -46,7 +44,7 @@ def main():
                 dataRows.append(curRow)
 
     newData = DataFrame(dataRows, columns=newColumns)
-    newData.to_csv("./data/newDataSet3.csv", index=False, header=True)
+    newData.to_csv("./data/urls.data", index=False, header=True)
 
 # Helper functions for extracting URL string features
 def getLength(row):
