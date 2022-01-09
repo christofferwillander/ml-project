@@ -263,9 +263,5 @@ def tuneKNN(KNN, X_train, y_train):
     print("\n")
     return KNN_randgrid.best_params_
 
-
-def getResults(resultData, models):
-    return 0
-
 if __name__ == "__main__":
     main()
